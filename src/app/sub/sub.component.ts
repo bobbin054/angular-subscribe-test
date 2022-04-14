@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { from, Observable, of } from "rxjs";
+import { from, map, Observable, of } from "rxjs";
 
 @Component({
   selector: "sub",
@@ -7,28 +7,30 @@ import { from, Observable, of } from "rxjs";
   styleUrls: ["./sub.component.css"],
 })
 export class SubComponent implements OnInit {
-  // Create simple observable that emits three values
+  // Create observable that emits three values
   private _myObservable: Observable<number> = of(1, 2, 3);
 
   constructor() {}
 
-  ngOnInit() {
-    // declaring the observer by itself.
-    const myObserver = {
-      next: (x: number) => console.log("Observer got a next value: " + x),
-      error: (err: Error) => console.error("Observer got an error: " + err),
-      complete: () => console.log("Observer got a complete notification"),
-    };
+  // Create a observer that logs to the console.
+  _myObserver = {
+    next: (x: number) => console.log("Observer got a next value: " + x),
+    error: (err: Error) => console.error("Observer got an error: " + err),
+    complete: () => console.log("Observer got a complete notification"),
+  };
 
-    //using the pre-declared observer.
-    of(1, 2, 3).subscribe(myObserver);
-    
+  ngOnInit() {
+    // Sub to the observable using the observer.
+    this._myObservable.subscribe(this._myObserver);
+
     //using subscribe and passing an observer object.
     of(1, 2, 3).subscribe({
       next: (x: number) => console.log("Observer got a next value: " + x),
       error: (err: Error) => console.error("Observer got an error: " + err),
       complete: () => console.log("Observer got a complete notification"),
     });
+
+    of(1, 2, 3).pipe(map((x) => console.log("Yo! ",x)));
 
     from([
       "hello 1",
