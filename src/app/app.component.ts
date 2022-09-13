@@ -43,6 +43,9 @@ export class AppComponent {
       )
       .subscribe({
         next: (x: number) => console.log('sub next => ' + x),
+        complete: () => {
+          console.log('Done');
+        },
       });
 
     // from([
